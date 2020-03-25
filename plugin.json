@@ -1,0 +1,144 @@
+{
+	"_comment0": "This section establishes the inital metadata for the plugin. Here you set the name of the plugin, the version number, what programing language you use, the name that will appear on the technologies page, the source file of the plugin, what packages are required to be in the python file, and how the plugin is activated.",
+	"name": "custom.remote.python.WindowsEventLog",
+	"version": "1.052",
+	"type": "python",
+	"entity": "CUSTOM_DEVICE",
+	"metricGroup": "tech.WindowsEventLog",
+	"processTypeNames": ["PYTHON"],
+	"technologies": ["Windows Events"],
+	"source":
+	{
+		"package": "windows_event_log_plugin",
+		"className": "WindowsEventLog",
+		"install_requires":
+		[
+			"requests>=2.6.0",
+			"EventParser",
+			"subprocess",
+			"sys",
+			"re"
+		],
+		"activation": "Remote"
+	},
+	"_comment1": "The metrics section is the name and type of the custom metric, this is the base information of the metric and is used by the timerseries API to represent the custom metric in dynatrace. ",
+	"metrics":
+	[
+		{
+			"_comment2":"Entity tells what type of device it is. If new technology it is always CUSTOM_DEVICE.",
+			"_comment3":"Timeseries is how the data is viewed in dynatrace. Key is used to create a key value pair in the python file. Unit sets what unit is used.",
+			"entity": "CUSTOM_DEVICE",
+			"timeseries":
+			{
+				"key": "counter",
+				"unit": "Byte",
+				"aggregation": "sum",
+				"displayname": "Bytes"
+			}
+		}
+	],
+	"_comment4":"UI Sets the technology group metrics and the individual metrics for a page. This is what is show when you click on the plugins technology page",
+	"ui":
+	{
+		"keymetrics":
+		[
+			{
+				"key": "counter",
+				"aggregation": "max",
+				"mergeaggregation": "sum",
+				"displayname": "Bytes"
+			}
+		],
+		"_comment5":"Chart that will show up in process page",
+		"keycharts":
+		[
+			{
+				"group": "Print Service",
+				"title": "Print Serivce",
+				"description": "Total number of print queue bytes",
+				"series": [
+					{
+						"key": "counter",
+						"displayname": "Bytes",
+						"aggregation": "max",
+						"mergeaggregation": "sum",
+						"color": "#00a6fb",
+						"seriestype": "bar",
+						"unit": "Byte"
+					}
+				]
+			}
+		],
+		"_comment6":"Chart that will show up in more details page",
+		"charts":
+		[
+			{
+				"group": "Print Service",
+				"title": "Print Serivce",
+				"description": "Total number of print queue bytes",
+				"series": [
+					{
+						"key": "counter",
+						"displayname": "Bytes",
+						"aggregation": "max",
+						"mergeaggregation": "sum",
+						"color": "#00a6fb",
+						"seriestype": "bar",
+						"unit": "Byte"
+					}
+				]
+			}
+		]
+	},
+	"_comment7":"This section creates the keys and type for values assigned when setting up an endpoint for the plugin. They can and should be used as global variables in the python file(This is done in the initialize function under the format self.{Key} = self.config.get({key}, 'default value').",
+	"properties":
+	[
+    {
+      "key": "machine_name",
+      "type": "String"
+    },
+    {
+      "key": "user",
+      "type": "String"
+    },
+    {
+      "key": "password",
+      "type": "password"
+    },
+    {
+      "key": "remote_machine",
+      "type": "boolean"
+    }
+  ],
+	"_comment8":"Sets the order in which the properties above appear on the page and any text that appears under them. Good rule of thumb is two endpoint inputs per row. Key should be the same as the properties section",
+	"configUI":
+	{
+		"displayName": "Windows Event Log Plugin",
+		"properties":
+		[
+			{
+		    "key": "machine_name",
+		    "displayName": "Machine Name",
+		    "displayOrder": 1,
+				"displayHint": "Machine Name or IP Address"
+			},
+			{
+		    "key": "user",
+		    "displayName": "Username",
+		    "displayOrder": 2,
+				"displayHint": "Username to remotely login to machine"
+			},
+			{
+		    "key": "password",
+		    "displayName": "Password",
+		    "displayOrder": 3
+			},
+			{
+		    "key": "remote_machine",
+		    "displayName": "Is the machine remote?",
+		    "displayHint": "Mark as false if localhost",
+		    "displayOrder": 4
+			}
+		]
+	}
+}
